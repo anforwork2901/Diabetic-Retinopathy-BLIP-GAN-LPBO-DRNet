@@ -232,7 +232,7 @@ graph TD
 │       ├── deep_learning/
 │       │   ├── models/
 │       │   │   ├── lpbo_drnet/         # LPBOBoundaryConditionedNet, Tokenizer, Blocks
-│       │   │   └── blip_gan/           # WAE, LRDB, ACFDGenerator, ACFDDiscriminator
+│       │   │   └── blip_gan/           # WAE, LRDB, Generator, Discriminator
 │       │   ├── losses/                 # CombinedOrdinalLoss, AdjacentBoundaryFocalLoss
 │       │   └── optim/                  # ModelEMA (Exponential Moving Average)
 │       ├── image_processing/           # LetterboxPad
@@ -425,9 +425,9 @@ print(f"Diagnosis: Grade {grade} - {grades_map[grade]} (Confidence: {confidence*
 
 ## 📚 Technical Documentation
 
-For in-depth theoretical analysis and mathematical formulations, refer to the technical documents in [`docs/`](docs/):
-- **[Architectural Comparison: ACFD-GAN vs. BLIP-GAN](docs/blip_gan_architectural_comparison.md)**: Deep dive into the 7 core components, feature fusion attention, and comparative matrix.
-- **[BLIP-GAN Design Rationale & Innovations](docs/blip_gan_design_rationale.md)**: Critical breakdown of baseline ACFD-GAN limitations, weak-mask extraction, and defense preparation inquiries.
+For in-depth theoretical formulations, attention mechanics, and clinical loss specifications:
+- **[BLIP-GAN Architectural Specification](docs/blip_gan_architecture.md)**: Generative engine — WAE latent conditioning, lightweight residual dense blocks (LRDB), cross-layer attention (ACFF), and background-preserving lesion inpainting.
+- **[LPBO-DRNet Architectural Specification](docs/lpbo_drnet_architecture.md)**: Clinical classification engine — Multi-stage lesion pyramid tokenizer, cross-attention super-token compressor, boundary-conditioned cascaded head, and adjacent boundary focal loss.
 
 ---
 
