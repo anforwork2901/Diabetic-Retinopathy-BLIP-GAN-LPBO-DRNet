@@ -423,10 +423,19 @@ print(f"Diagnosis: Grade {grade} - {grades_map[grade]} (Confidence: {confidence*
 
 ---
 
-## 👤 Author & Academic Context
+## 📚 Technical Documentation
+
+For in-depth theoretical analysis and mathematical formulations, refer to the technical documents in [`docs/`](docs/):
+- **[Architectural Comparison: ACFD-GAN vs. BLIP-GAN](docs/blip_gan_architectural_comparison.md)**: Deep dive into the 7 core components, feature fusion attention, and comparative matrix.
+- **[BLIP-GAN Design Rationale & Innovations](docs/blip_gan_design_rationale.md)**: Critical breakdown of baseline ACFD-GAN limitations, weak-mask extraction, and defense preparation inquiries.
+
+---
+
+## 👤 Author
 
 - **Author**: **Phan Thien An** (AI Engineer)
 - **Specialization**: Medical Computer Vision, Generative AI (GANs), and Enterprise AI Architecture
+- **GitHub**: [@anforwork2901](https://github.com/anforwork2901)
 
 ---
 
