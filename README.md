@@ -425,11 +425,8 @@ print(f"Diagnosis: Grade {grade} - {grades_map[grade]} (Confidence: {confidence*
 
 ## 👤 Author & Academic Context
 
-This repository represents the Graduation Capstone Project (**Đồ Án Tốt Nghiệp**) in Artificial Intelligence at **Ho Chi Minh City University of Technology (HUTECH)**.
-
-- **Author**: **Phan Thien An** (Data Science & AI Engineer)
+- **Author**: **Phan Thien An** (AI Engineer)
 - **Specialization**: Medical Computer Vision, Generative AI (GANs), and Enterprise AI Architecture
-- **GitHub**: [github.com/phanthienan](https://github.com) *(Update with your profile)*
 
 ---
 
