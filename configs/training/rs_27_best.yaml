@@ -1,0 +1,117 @@
+# ==============================================================================
+# RS-27 Best Configuration — LPBO-DRNet achieving 98.15% Test Accuracy
+# APTOS 2019 + BLIP-GAN | EfficientNetV2-S backbone
+# Centralized hyperparameters adhering to Clean Architecture.
+# ==============================================================================
+
+run_name: "lpbo_effv2s_aptos_gan_bndfocal_g2.0_bw250_seed42"
+
+# ── Reproducibility ────────────────────────────────────────────────────────────
+seed: 42
+num_classes: 5
+class_names:
+  - "No DR"
+  - "Mild"
+  - "Moderate"
+  - "Severe"
+  - "Proliferative DR"
+
+# ── Dataset Mode ───────────────────────────────────────────────────────────────
+# Select 1 of 4 modes: aptos_only | aptos_gan | messidor_only | messidor_gan
+data_mode: "aptos_gan"
+
+# ── Dataset Paths (in order of priority) ───────────────────────────────────────
+aptos_root_candidates:
+  - "data/aptos2019-blindness-detection 2"
+  - "/kaggle/input/aptos2019-blindness-detection"
+  - "/kaggle/input/competitions/aptos2019-blindness-detection"
+
+aptos_gan_root_candidates:
+  - "data/GAN_Data_APTOS"
+  - "/kaggle/input/datasets/phuclenguyen/gan-data/GAN_Data_APTOS"
+  - "/kaggle/input/datasets/phanthinan/aptos-gan/GAN_Data_APTOS"
+
+messidor_root_candidates:
+  - "data/Messidor"
+  - "/kaggle/input/datasets/mainguynthanht/messidor/Messidor"
+
+messidor_gan_root_candidates:
+  - "data/GAN_Data_MESSIDOR"
+  - "/kaggle/input/datasets/mainguynthanht/gan-messidor/GAN_Data_MESSIDOR"
+
+# ── Model Architecture ─────────────────────────────────────────────────────────
+model:
+  backbone: "lpbo_effv2s"               # EfficientNetV2-S (torchvision)
+  proj_dim: 256                         # Projection dimension
+  num_super_tokens: 16                  # CrossAttentionCompressor output tokens
+  num_heads: 8                          # Multi-head attention heads
+  sa_layers: 2                          # Self-attention layers after compressor
+  head_dropout: 0.10                    # Dropout in head
+  drop_path_rate: 0.10                  # DropPath rate
+
+# ── Lesion Pyramid Tokenizer ───────────────────────────────────────────────────
+pyramid:
+  stage_ids: [3, 4, 6]                  # EfficientNetV2-S stage indices
+  stage_channels: [64, 128, 256]        # Channels at each stage
+  top_ks: [12, 12, 8]                   # Top-k tokens selected per stage
+  score_temp: 0.70                      # Softmax temperature for attention score
+
+# ── Image & Batch ──────────────────────────────────────────────────────────────
+image_size: 320
+batch_size: 16
+num_workers: 2
+
+# ── Learning Rates ─────────────────────────────────────────────────────────────
+lr_backbone: 5.0e-5                     # LR for EfficientNetV2-S backbone
+lr_head: 3.0e-4                         # LR for classification head
+weight_decay: 1.0e-4
+grad_clip_norm: 1.0
+
+# ── Training Schedule ──────────────────────────────────────────────────────────
+max_epochs: 120
+early_stopping_patience: 15
+
+# ── LR Scheduler (ReduceLROnPlateau) ──────────────────────────────────────────
+scheduler:
+  type: "ReduceLROnPlateau"
+  mode: "min"                           # Monitor val_loss
+  factor: 0.5
+  patience: 6
+  min_lr: 1.0e-6
+
+# ── Loss Functions ─────────────────────────────────────────────────────────────
+loss:
+  # OrdinalBCE + ExpectedRankFocal (CombinedOrdinalLoss)
+  focal_gamma: 2.0
+  label_smoothing: 0.0
+  ordinal_rank_weight: 0.40             # 0.40 = focal rank, 0.60 = BCE
+
+  # AdjacentBoundaryFocalLoss — KEY innovation of RS-27
+  boundary_focal_gamma: 2.0            # Focal gamma for boundary loss
+  boundary_pair_weights: [2.00, 2.50, 2.00, 1.50]  # Weights for pairs (0-1, 1-2, 2-3, 3-4)
+  boundary_loss_weight: 0.40           # Boundary loss weight in total loss
+
+  # Auxiliary losses
+  ce_aux_weight: 0.12                  # Cross-entropy auxiliary head weight
+  prototype_aux_weight: 0.08           # Prototype similarity head weight
+  prototype_temperature: 0.20
+
+# ── EMA (Exponential Moving Average) ──────────────────────────────────────────
+ema:
+  enabled: true
+  decay: 0.9995                        # RS-27 proven: higher decay = smoother, more stable weights
+
+# ── BAO Post-processing ────────────────────────────────────────────────────────
+bao:
+  mode: "aggressive"                   # 'conservative' | 'aggressive'
+  margin: 0.32
+  confidence: 0.96
+
+# ── Threshold Tuning ──────────────────────────────────────────────────────────
+threshold_tune_metric: "qwk"           # 'qwk' | 'acc'
+
+# ── Checkpoint Ensemble ────────────────────────────────────────────────────────
+ensemble_top_n: 5
+
+# ── Output Paths ───────────────────────────────────────────────────────────────
+output_dir: "checkpoints/best"
