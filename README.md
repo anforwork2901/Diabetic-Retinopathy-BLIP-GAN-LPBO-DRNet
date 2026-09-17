@@ -7,6 +7,7 @@
 [![Model Accuracy](https://img.shields.io/badge/Test%20Accuracy-98.15%25-success.svg)]()
 [![Quadratic Weighted Kappa](https://img.shields.io/badge/Test%20QWK-0.9906-success.svg)]()
 [![ROC-AUC](https://img.shields.io/badge/Macro%20ROC--AUC-0.9908-blueviolet.svg)]()
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
 ---
 
@@ -442,3 +443,10 @@ For in-depth theoretical formulations, attention mechanics, and clinical loss sp
 ## 📄 Acknowledgements
 
 - **Datasets**: Built upon the clinical benchmarks [APTOS 2019 Blindness Detection](https://www.kaggle.com/c/aptos2019-blindness-detection) and [Messidor Retinal Fundus Dataset](http://www.adcis.net/en/third-party/messidor/).
+
+---
+
+## 📜 License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
